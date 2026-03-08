@@ -5,7 +5,7 @@ using namespace std;
 #include "Circulo.h" //archivo cabecera que contiene la definicion de la clase Circulo
 #include "Cuadrado.h"//archivo cabecera que contiene la definicion de la clase Cuadrado
 #include "Tria_equi.h"//archivo cabecera que contiene la definicion de la clase Triangulo
-//#include "Rectangulo.h"//archivo cabecera que contiene la definicion de la clase Rectangulo
+#include "Rectangulo.h"//archivo cabecera que contiene la definicion de la clase Rectangulo
 #define PI 4.1516 //constante
 #define CUADRADO(x) (x*x)//macro
 
@@ -16,7 +16,7 @@ Circulo::Circulo(){//constructor
 	radio=0.0; //dato miembro o atributo
 }
 				void Circulo::solicitar_datos(){
-					cout<< "Escriba el radio del circulo: ";
+					cout<< "Ingrese el radio del circulo: ";
 					cin>>radio;
 				}
 
@@ -35,7 +35,7 @@ Cuadrado::Cuadrado(){ //constructor
 	lado = 0.0; //dato miembro o atributo
 }
 				void Cuadrado::solicitar_datos(){
-					cout<< "Escriba el lado del cuadrado: ";
+					cout<< "Ingrese el lado del cuadrado: ";
 					cin>> lado;
 				}
 				
@@ -46,7 +46,7 @@ Cuadrado::Cuadrado(){ //constructor
 				
 				float Cuadrado::area_cuadrado(){
 					cout<< "\nEl area del cuadrado de lado " <<lado<< " es: ";
-					return CUADRADO(lado); //utilizando la macro porque es igual a lado por lado
+					return CUADRADO(lado); //reutilizo la macro porque el area es igual a lado por lado
 				}
 
 //TRIANGULO_EQUILATERO
@@ -55,22 +55,47 @@ Tria_equi::Tria_equi(){ //constructor
 	base = 0.0; // dato miembro
 	altura = 0.0; // dato miembro
 }
-				void Tria_equi::solicitar_datos(){
-					cout<< "Escriba la base del triangulo equilatero: ";
+				void Tria_equi::solicitar_datos(){ //funcion miembro
+					cout<< "Ingrese la base del triangulo equilatero: ";
 					cin>> base;
-					cout<< "\nEscriba la altura del triangulo equilatero: ";
+					cout<< "\nIngrese la altura del triangulo equilatero: ";
 					cin>> altura;
 				}
 		
-				float Tria_equi::perimetro_tria_equi(){
+				float Tria_equi::perimetro_tria_equi(){ //perimetro
 					cout<< "\nEl perimetro del triangulo de base "<<base<< " y altura "<<altura<< " es: ";
 					return base*3;
 				}
 		
-				float Tria_equi::area_tria_equi(){
+				float Tria_equi::area_tria_equi(){ //area
 					cout<< "\nEl area del triangulo de base "<<base<< " y altura "<<altura<< " es: ";
 					return (base*altura)/2;
 				}
+				
+//RECTANGULO
+
+Rectangulo::Rectangulo(){ //constructor
+	base = 0.0; //dato miembro
+	altura = 0.0; //dato miembro
+}
+
+				void Rectangulo::solicitar_datos(){ //funcion miembro
+					cout<< "Ingrese la base del rectangulo: ";
+					cin>> base;
+					cout<< "\nIngrese la altura del rectangulo: ";
+					cin>> altura;
+				}
+				
+				float Rectangulo::perimetro_rectangulo(){ //perimetro
+					cout<< "\nEl perimetro del rectangulo de base "<<base << " y altura "<<altura << " es: ";
+					return base*2 + altura*2;
+				}
+					
+				float Rectangulo::area_rectangulo(){ //area
+					cout<< "\nEl area del rectangulo de base "<<base << " y altura "<<altura << " es: ";
+					return base*altura;
+				}
+					
 
 //En main implemento Switch Case para el menu de opciones y construyo los objetos de las figuras
 
@@ -178,13 +203,46 @@ int main(){
 				}
 				
 				else{
-					cout<< "Opcion no valida.\n";
+					cout<< "Opcion no valida.";
+				}
+		}
+		break;
+		
+		case 4: {
+				cout<<"***********************************************************************************************\n";
+				cout<<"Eligio el Rectangulo\n";
+				cout<<"***********************************************************************************************\n";
+				
+				Rectangulo rectangulo1; //se crea el objeto rectangulo1
+				rectangulo1.solicitar_datos(); //mensaje
+				
+				int opcion;
+				cout<< "1. Area.\n" << "2. Perimetro.\n" << "3. Ambas.\n";
+				cout<< "Elige el numero de la opcion que deseas calcular: ";
+				cin>> opcion;
+				
+				if (opcion == 1){ //area
+					cout<< rectangulo1.area_rectangulo();
+				}
+				else
+				
+				if (opcion == 2){ //perimetro
+					cout<< rectangulo1.perimetro_rectangulo();
+				}
+				else
+				
+				if (opcion == 3){ //calcula ambas
+					cout<< rectangulo1.area_rectangulo();
+					cout<< rectangulo1.perimetro_rectangulo();
+				}
+				
+				else{
+					cout<< "Opcion no valida.";
 				}
 		}
 		break;
 				
-		
-		default: cout<<"Respuesta no valida."; 
+		default: cout<<"Opcion no valida."; 
 	}
 	
 	return 0;
