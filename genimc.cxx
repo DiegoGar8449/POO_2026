@@ -1,42 +1,90 @@
-/*GENERACION E IMC
-Garcia Rodriguez Diego - 3NV31 POO
-10 - 02 - 2026 */
+/*IMC v1.0 Orientada a objetos
+Garcia Rodriguez Diego - 3NV31 - POO
+07 - 03 - 2026 */
 
 #include <iostream>
+#include <vector>
+#include "Persona.h" //archivo cabecera que contiene la clase Persona
+
 #include <string>
 using namespace std;
+#define CUADRADO(x) (x*x)//macro
 
-struct Usuario { //Al inicio se me complico definir las variables del struct. Considero que nombre, año, peso y estatura estan bien.
-string nombre {};
-int anio {};
-double peso {}; //Double porque, al hacer su potencia a 2, float no soporta la cantidad.
-float estatura {};
-};
+//DEFINICION DE METODOS
+
+//CLASE PERSONA
+Persona::Persona(){ //constructor
+	peso = 0.0; //dato miembro o atributo
+	estatura = 0.0;
+}
+	
+void Persona::solicitar_datos(){ //funcion miembro
+	cout<<"Ingrese su nombre: ";
+		cin>>nombre;
+	cout<< "\nIngrese su primer apellido: ";
+		cin>>apellido1;
+	cout<< "\nIngrese su segundo apellido: ";
+		cin>>apellido2;
+			
+	cout<<"\nIngrese su peso en kilogramos: ";
+		cin>>peso;
+			
+	cout<<"\nIngrese su estatura en metros: ";
+		cin>>estatura;
+			
+	cout<<"\nIngrese su hobby: ";
+		cin>>hobby;
+}
+		
+float Persona::imc(){
+return peso/CUADRADO(estatura);
+}
+		
+string Persona::estado_salud(){
+	float indice = imc();
+		if (indice < 18.5)
+			return "Bajo peso";
+		else if (indice >= 18.5 && indice <= 24.9)
+			return "Peso normal";
+		else if (indice >= 25 && indice <= 29)
+			return "Sobre peso";
+		else
+			return "Obesidad";
+}
+			
+void Persona::mostrar_datos(){ //funcion miembro
+	cout<< "Los datos personales de " <<nombre; 
+	cout<< " " <<apellido1;
+	cout<< " " <<apellido2;
+	cout<< " son: \n";
+	cout<< "Peso: "<<peso<<" kg.\n";
+	cout<< "Estatura: "<<estatura<<" m.\n";
+	cout<< "IMC: "<<imc() << " kg/m2\n";
+	cout<< "Su estado de salud es: "<<estado_salud()<< "\n";
+	cout<< "Hobby: "<<hobby;
+}
 
 int main(){
-	Usuario Diego {}; //Mi idea con el struct es que se insertan distintos usuarios que comparten las mismas variables.
-	Diego.nombre = "Diego";
-	Diego.anio = 2003;
-	Diego.peso = 84.0;
-	Diego.estatura = 1.82;
+	int i = 0;
+	int n;
+	cout<< "Ingrese la cantidad de personas que desee registrar: ";
+	cin>>n;
 	
-	double imc;
-	imc = Diego.peso/(Diego.estatura*Diego.estatura); //Intente usar pow y **2 para estatura pero creo que eso no se puede en c++
-	if (imc <18.5)
-	cout <<"El peso de Diego es bajo y su imc es: " << imc <<'\n';
-	if (imc >= 18.5 && imc <= 24.9)
-	cout <<"El peso de Diego es normal y su imc es: " << imc << '\n';
-	if (imc >=25 && imc <=29.9)
-	cout <<"El peso de Diego es alto y su imc es: " << imc << '\n';
+	//vector para n objetos persona
+	vector<Persona> personas(n);
 	
-	if (Diego.anio >= 1995 && Diego.anio <= 2014)
-	cout <<"La generacion de "<< Diego.nombre << " es Z o Centennial. \n";
-	if (Diego.anio >= 1946 && Diego.anio <= 1964)
-	cout << "La generacion de Diego es Baby Boomer.";
-	if (Diego.anio >= 1965 && Diego.anio <= 1984)
-	cout << "La generacion de Diego es X.";
-	if (Diego.anio>= 1985 && Diego.anio <= 1994)
-	cout <<"La generacion de Diego es Millenial o Y.";
+	//pedir datos
+	for (int i = 0; i < n; i++){
+		cout<<"\n--- Persona " << (i + 1) << " ---"<<endl;
+		personas[i].solicitar_datos(); //mensaje
+	}
+	
+	//mostrar resultados
+	cout<< "\n\n **** RESULTADOS ****"<<endl;
+	for (i = 0; i < n; i++){
+		personas[i].mostrar_datos(); //mensaje
+		cout << "---------------------" <<endl;
+	}
 	
 	return 0;
 }
