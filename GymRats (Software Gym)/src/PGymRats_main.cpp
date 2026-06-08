@@ -41,7 +41,7 @@ int main(){
 	return 0;
 }
 
-//DEFINICION PROTOTIPOS DEL MENU
+//DEFINICION PROTOTIPOS DEL MENU Y FUNCIONES AUXILIARES DE PROCESAMIENTO
 
 //limpieza de pantalla.
 void limpiar_pantalla(){
@@ -63,9 +63,11 @@ int seleccionar_perfil(){
 		cout<<"\n*****************************************";
 		cout<<"\nIngrese el numero del para ingresar al gimnasio: ";
 		cin>> opcion;
+		
 		if (opcion >= 1 && opcion <= 4){ //validacion de dato ingresado.
 			valido = true;
 		}
+		
 		else {
 			cout<<"Opcion invalida. Elija un numero correcto";
 		}
@@ -74,3 +76,29 @@ int seleccionar_perfil(){
 	
 	return opcion;
 }
+
+void realizar_accion(int_opcion){
+	switch (opcion){ //switch para elegir la funcion que construye el objeto.
+		case 1: procesar_jefe(); break;
+		case 2: procesar_empleado(); break;
+		case 3: procesar_entrenador(); break;
+		case 4: procesar_cliente(); break;
+	}
+}
+
+void procesar_jefe(){
+	CJefe jefe; //crear objeto jefe
+	jefe.solicitar_datos();//metodo heredado de la clase padre CPersona.
+	jefe.registrar_cuenta();//metodos del jefe.
+	jefe.IngresoMensualGimnasio();
+	jefe.contratar_empleado();
+	jefe.despedir_empleado();
+	jefe.contratar_entrenador();
+	jefe.despedir_entrenador();
+	jefe.modificar_contrasenia();
+	jefe.implementar_deporte();
+	jefe.comprar_equipoGimnasio();
+	jefe.pagar_trabajador();
+}
+
+/*************** 2. FUNCIONES DEL PROGRAMADOR ***************/
