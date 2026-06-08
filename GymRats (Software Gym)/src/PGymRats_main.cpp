@@ -90,15 +90,24 @@ void procesar_jefe(){
 	CJefe jefe; //crear objeto jefe
 	jefe.solicitar_datos();//metodo heredado de la clase padre CPersona.
 	jefe.registrar_cuenta();//metodos del jefe.
+	jefe.registrar_empleado();
 	jefe.IngresoMensualGimnasio();
-	jefe.contratar_empleado();
 	jefe.despedir_empleado();
-	jefe.contratar_entrenador();
+	jefe.registrar_entrenador();
 	jefe.despedir_entrenador();
 	jefe.modificar_contrasenia();
 	jefe.implementar_deporte();
 	jefe.comprar_equipoGimnasio();
 	jefe.pagar_trabajador();
+}
+
+void procesar_empleado(){
+	CEmpleado empleado; //crear objeto empleado
+	empleado.solicitar_datos()//metodo heredado de CPersona.
+	empleado.registrar_cliente();//metodos del empleado
+	empleado.eliminar_cliente();
+	empleado.modificar_contrasenia();
+	empleado.llamar_emergencias();
 }
 
 /*************** 2. FUNCIONES DEL PROGRAMADOR ***************/

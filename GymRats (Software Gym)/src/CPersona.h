@@ -35,7 +35,7 @@ class CJefe : public CPersona{
 	void despedir_empleado();
 	void contratar_entrenador();
 	void despedir_entrenador();
-	void modificar_datosUsuarios();
+	void modificar_contrasenia();
 	void implementar_deporte();
 	float comprar_equipoGimnasio;
 	float pagar_trabajador;
@@ -65,7 +65,8 @@ class CEmpleado : public CPersona{
 	
 	public:
 	CEmpleado();// constructor
-	void registrar_cliente();//funciones miembro
+	void registrar_cuenta();//funciones miembro
+	void registrar_cliente();
 	void eliminar_cliente();
 	void modificar_contrasenia();
 	void llamar_emergencias();
@@ -77,10 +78,11 @@ class CEntrenador : public CPersona{
 	std::string constrasenia;
 	std::string tipo_deporte;
 	std::string turno;
+	std::string cartera_clientes[3];
 	float sueldo;
 	
 	public:
 	CEntrenador();//constructor
 	void enseniar();
-	void cartera_clientes();
+	void mostrar_CarteraDeClientes();
 };
