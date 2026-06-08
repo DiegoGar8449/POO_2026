@@ -4,39 +4,74 @@
 //***********Clase abstracta o Superclase****************
 class CPersona{
 	protected:
-	std::string nombre;
+	std::string nombre;//datos miembro
 	std::string apellido_paterno;
 	std::string apellido_materno;
 	int edad;
 	std::string telefono_celular;
-	std:string calle;
+	std::string calle;
 	std::string calle_num;
-	std_string colonia;
+	std::string colonia;
 	
 	public:
 	CPersona();//constructor
-	virtual void solicitar_datos();
-	virtual void mostrar_datos();
-	virtual ~CPersona();//destructor
+	void solicitar_datos();//funciones miembro
+	void mostrar_datos();
+	~CPersona();//destructor
 };
 
 //***********clases hijas****************
+class CJefe : public CPersona{
+	private:
+	std::string id;//datos miembro
+	std::string contrasenia;
+	float ingresosGimnasio;
+	
+	public:
+	CJefe();//constructor
+	void registrar_cuenta();
+	void IngresoMensualGimnasio();//funciones miembro
+	void contratar_empleado();
+	void despedir_empleado();
+	void contratar_entrenador();
+	void despedir_entrenador();
+	void modificar_datosUsuarios();
+	void implementar_deporte();
+	float comprar_equipoGimnasio;
+	float pagar_trabajador;
+};
+
 class CCliente : public CPersona{
 	private:
-	std::string id;
+	std::string id;//datos miembro
 	std::string constrasenia;
 	float mensualidad;
 	
 	public:
 	CCliente();//constructor
-	virtual void elegir_area();
-	virtual float pagar_mensualidad();
-	virtual void entrenar();
-	virtual void modificar_datos();
-	virtual void elegir_entrenador();
+	void elegir_area();//funciones miembro
+	float pagar_mensualidad();
+	void entrenar();
+	void modificar_contrasenia();
+	void elegir_entrenador();
 };
 
-class CEntrenador{
+class CEmpleado : public CPersona{
+	private:
+	std::string id;
+	std::string constrasenia;
+	std::string turno;
+	float sueldo;
+	
+	public:
+	CEmpleado();// constructor
+	void registrar_cliente();//funciones miembro
+	void eliminar_cliente();
+	void modificar_contrasenia();
+	void llamar_emergencias();
+};
+
+class CEntrenador : public CPersona{
 	private:
 	std::string id;
 	std::string constrasenia;
@@ -45,6 +80,7 @@ class CEntrenador{
 	float sueldo;
 	
 	public:
-	CEntrenador()//constructor
-	virtual void enseniar();
+	CEntrenador();//constructor
+	void enseniar();
+	void cartera_clientes();
 };
