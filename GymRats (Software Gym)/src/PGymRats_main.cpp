@@ -39,3 +39,14 @@ int main(){
 	cout<<"\n¡Gracias por usar el programa!";
 	return 0;
 }
+
+//DEFINICION PROTOTIPOS
+
+//limpieza de pantalla en el menu.
+void limpiar_pantalla(){
+	#ifdef _WIN32
+		system("cls");//comando para windows.
+	#else
+			system("clear");//comando para linux.
+	#endif		
+}
