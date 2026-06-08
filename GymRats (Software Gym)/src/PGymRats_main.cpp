@@ -13,11 +13,12 @@ using namespace std;
 
 //PROTOTIPOS (declaraciones de funciones dentro del main)
 void limpiar_pantalla(); // limpia pantalla en linux y windows.
-int seleccionar_perfil(); // Jefe, empleado, entrenador, cte.
-void calcular_sueldo(int opcion); //para empleado y entrenador.
-void mostrar_sueldo(CPersona* empleado); 
-void calcular_membresia(int opcion); //para cliente
-void mostrar_TotalMembresia(CPersona* cliente);
+int seleccionar_perfil(); // Jefe, empleado, entrenador, cliente.
+void procesar_jefe(); //funcion para crear objeto jefe.
+void procesar_empleado(); //funcion para crear objeto empleado.
+void procesar_entrenador(); //funcion para crear objeto entrenador.
+void procesar_cliente(); //funcion para crear objeto cliente.
+void mostrar_datos(); //Mostrar la info. personal del usuario.
 
 /*************** 1. MAIN ***************/
 int main(){
@@ -28,11 +29,10 @@ int main(){
 	do{
 		limpiar_pantalla();
 		int opcion = seleccionar_perfil();
-		calcular_sueldo(opcion);
-		calcular_membresia(opcion);
+		realizar_accion(opcion);
 		
 		cout<<"\n****************************************";
-		cout<<"\n¿Seleccionar otro perfil?";
+		cout<<"\n¿Seleccionar otro perfil? 1 = Si. 2 = No: ";
 		cin>> continuar;
 	} while (continuar==1);
 	
