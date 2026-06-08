@@ -40,13 +40,23 @@ int main(){
 	return 0;
 }
 
-//DEFINICION PROTOTIPOS
+//DEFINICION PROTOTIPOS DEL MENU
 
-//limpieza de pantalla en el menu.
+//limpieza de pantalla.
 void limpiar_pantalla(){
 	#ifdef _WIN32
 		system("cls");//comando para windows.
 	#else
 			system("clear");//comando para linux.
 	#endif		
+}
+
+//seleccionar_perfil.
+int seleccionar_perfil(){
+	int num;
+	cout<<"\nPerfiles del gimnasio: ";
+	cout<<"1) Jefe. 2) Empleado. 3) Entrenador. 4) Cliente.";
+	cout<<"\nElija su perfil para entrar al gimnasio: ";
+	cin>> num;
+	return num;
 }
