@@ -13,7 +13,8 @@ using namespace std;
 
 //PROTOTIPOS (declaraciones de funciones dentro del main)
 void limpiar_pantalla(); // limpia pantalla en linux y windows.
-int seleccionar_perfil(); // Jefe, empleado, entrenador, cliente.
+int seleccionar_perfil(); 
+void realizar_accion(int opcion);	
 void procesar_jefe(); //funcion para crear objeto jefe.
 void procesar_empleado(); //funcion para crear objeto empleado.
 void procesar_entrenador(); //funcion para crear objeto entrenador.
@@ -27,9 +28,9 @@ int main(){
 	
 	int continuar;
 	do{
-		limpiar_pantalla();
-		int opcion = seleccionar_perfil();
-		realizar_accion(opcion);
+		limpiar_pantalla(); //limpia pantalla cuando se elige otro perfil.
+		int opcion = seleccionar_perfil(); // retorna 1, 2, 3, 4.
+		realizar_accion(opcion) // pasamos el return al switch
 		
 		cout<<"\n****************************************";
 		cout<<"\n¿Seleccionar otro perfil? 1 = Si. 2 = No: ";
@@ -51,12 +52,25 @@ void limpiar_pantalla(){
 	#endif		
 }
 
-//seleccionar_perfil.
+//seleccionar perfil
 int seleccionar_perfil(){
-	int num;
-	cout<<"\nPerfiles del gimnasio: ";
-	cout<<"1) Jefe. 2) Empleado. 3) Entrenador. 4) Cliente.";
-	cout<<"\nElija su perfil para entrar al gimnasio: ";
-	cin>> num;
-	return num;
+	int opcion;
+	bool valida = false; //condicion para repetir si la opcion no es valida.
+	
+	do{
+		cout<<"\n*************** PERFILES DE GIMNASIO ***************";
+		cout<<"\n 1) Jefe. 2) Empleado. 3) Entrenador. 4) Cliente.";
+		cout<<"\n*****************************************";
+		cout<<"\nIngrese el numero del para ingresar al gimnasio: ";
+		cin>> opcion;
+		if (opcion >= 1 && opcion <= 4){ //validacion de dato ingresado.
+			valido = true;
+		}
+		else {
+			cout<<"Opcion invalida. Elija un numero correcto";
+		}
+		
+	} while (¡valido); //repite mientras la opcion sea no valida.
+	
+	return opcion;
 }
