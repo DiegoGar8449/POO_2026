@@ -13,13 +13,6 @@ using namespace std;
 
 //PROTOTIPOS (declaraciones de funciones dentro del main)
 void limpiar_pantalla(); // limpia pantalla en linux y windows.
-int seleccionar_perfil(); 
-void realizar_accion(int opcion);	
-void procesar_jefe(); //funcion para crear objeto jefe.
-void procesar_empleado(); //funcion para crear objeto empleado.
-void procesar_entrenador(); //funcion para crear objeto entrenador.
-void procesar_cliente(); //funcion para crear objeto cliente.
-void mostrar_datos(); //Mostrar la info. personal del usuario.
 
 /*************** 1. MAIN ***************/
 int main(){
@@ -28,11 +21,21 @@ int main(){
 	
 	int continuar;
 	do{
-		limpiar_pantalla(); //limpia pantalla cuando se elige otro perfil.
-		int opcion = seleccionar_perfil(); // retorna 1, 2, 3, 4.
-		realizar_accion(opcion) // pasamos el return al switch
+		limpiar_pantalla();
 		
-		cout<<"\n****************************************";
+		int opcion;
+		cout<<"\n*************** PERFILES GIMNASIO ***************";
+		cout<<"\n 1) Jefe. 2) Empleado. 3) Entrenador. 4) Cliente.";
+		cout<<"\nIngrese el numero de perfil al que quiera acceder: ";
+		cin>>opcion;
+		switch(opcion){
+			
+			case 1:
+			CPersona jefe; //objeto
+			jefe.solicitar_datos(); //mensaje
+			break;
+		} 
+		
 		cout<<"\n¿Seleccionar otro perfil? 1 = Si. 2 = No: ";
 		cin>> continuar;
 	} while (continuar==1);
@@ -41,8 +44,7 @@ int main(){
 	return 0;
 }
 
-//DEFINICION PROTOTIPOS DEL MENU Y FUNCIONES AUXILIARES DE PROCESAMIENTO
-
+/*************** DEFINICION PROTOTIPOS ***************/
 //limpieza de pantalla.
 void limpiar_pantalla(){
 	#ifdef _WIN32
@@ -52,62 +54,34 @@ void limpiar_pantalla(){
 	#endif		
 }
 
-//seleccionar perfil
-int seleccionar_perfil(){
-	int opcion;
-	bool valida = false; //condicion para repetir si la opcion no es valida.
-	
-	do{
-		cout<<"\n*************** PERFILES DE GIMNASIO ***************";
-		cout<<"\n 1) Jefe. 2) Empleado. 3) Entrenador. 4) Cliente.";
-		cout<<"\n*****************************************";
-		cout<<"\nIngrese el numero del para ingresar al gimnasio: ";
-		cin>> opcion;
-		
-		if (opcion >= 1 && opcion <= 4){ //validacion de dato ingresado.
-			valido = true;
-		}
-		
-		else {
-			cout<<"Opcion invalida. Elija un numero correcto";
-		}
-		
-	} while (¡valido); //repite mientras la opcion sea no valida.
-	
-	return opcion;
-}
-
-void realizar_accion(int_opcion){
-	switch (opcion){ //switch para elegir la funcion que construye el objeto.
-		case 1: procesar_jefe(); break;
-		case 2: procesar_empleado(); break;
-		case 3: procesar_entrenador(); break;
-		case 4: procesar_cliente(); break;
-	}
-}
-
-void procesar_jefe(){
-	CJefe jefe; //crear objeto jefe
-	jefe.solicitar_datos();//metodo heredado de la clase padre CPersona.
-	jefe.registrar_cuenta();//metodos del jefe.
-	jefe.registrar_empleado();
-	jefe.IngresoMensualGimnasio();
-	jefe.despedir_empleado();
-	jefe.registrar_entrenador();
-	jefe.despedir_entrenador();
-	jefe.modificar_contrasenia();
-	jefe.implementar_deporte();
-	jefe.comprar_equipoGimnasio();
-	jefe.pagar_trabajador();
-}
-
-void procesar_empleado(){
-	CEmpleado empleado; //crear objeto empleado
-	empleado.solicitar_datos()//metodo heredado de CPersona.
-	empleado.registrar_cliente();//metodos del empleado
-	empleado.eliminar_cliente();
-	empleado.modificar_contrasenia();
-	empleado.llamar_emergencias();
-}
-
 /*************** 2. FUNCIONES DEL PROGRAMADOR ***************/
+
+//CONSTRUCTOR CPersona
+CPersona::CPersona(){
+	nombre = "";
+	apellido_paterno = "";
+	apellido_materno = "";
+	edad = 0;
+	telefono_celular = "";
+	calle = "";
+	calle_num = "";
+	colonia = "";
+}
+//DESTRUCTOR CPersona
+CPersona::~CPersona(){}
+
+//DEFINICION METODOS CPersona
+void CPersona::solicitar_datos(){
+	cout<<"\n**************** INGRESE SUS DATOS ***************";
+	cout<<"\nNombre(s): ";
+	std::getline(std::cin >> std::ws, nombre);
+	cout<<"\nApellido paterno: "; cin>>apellido_paterno;
+	cout<<"\nApellido materno: "; cin>>apellido_materno;
+	cout<<"\nEdad: "; cin>>edad;
+	cout<<"\nTelefono celular: "; cin>>telefono_celular;
+	cout<<"\nCalle: "; cin>>calle;
+	cout<<"\nNumero de domicilio: "; cin>>calle_num;
+	cout<<"\nColonia: ";
+	std::getline(std::cin >> std::ws, colonia);
+	cout<<"****************************************";
+}
