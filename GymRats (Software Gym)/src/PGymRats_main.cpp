@@ -27,7 +27,12 @@ int main(){
 		cout<<"\n1) Jefe." << "\n2) Empleado." << "\n3) Entrenador." << "\n4) Cliente.";
 		cout<<"\n****************************************";
 		cout<<"\n\nIngrese el numero del perfil que desee crear o escriba 0 para salir: ";
-		cin>>opcion;
+		while (!(cin>>opcion)){
+			cin.clear();
+			cin.ignore(10000, '\n');
+			cout<<"\n¡Error! Ingrese solo dígitos.";
+			cout<<"\n\nIngrese el número del perfil que desee crear o escriba 0 para salir: ";
+		}
 			
 		switch(opcion){
 			
@@ -42,7 +47,12 @@ int main(){
 		} 
 		
 		cout<<"\n¿Seleccionar otro perfil para crear? 1 = Si. 0 = No: ";
-		cin>> continuar;
+		while (!(cin>> continuar) ||  (continuar != 1 && continuar != 0)){
+			cin.clear();
+			cin.ignore(10000, '\n');
+			cout << "\n¡Error! Seleccione una opcion valida (1 para Si, 0 para No).";
+			cout<<"\n\n¿Seleccionar otro perfil para crear? ";
+		}
 	} while (continuar==1);
 	
 	cout<<"\n¡Gracias por usar el programa!\n\n";
