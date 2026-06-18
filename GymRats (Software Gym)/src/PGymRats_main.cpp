@@ -46,7 +46,9 @@ int main(){
 			break;
 			
 			
-			
+			default:
+			cout<<"\n¡Error! Opción no valida en el menu de perfiles."
+			break;
 		} 
 		
 		cout<<"\n¿Seleccionar otro perfil para crear? 1 = Si. 0 = No: ";
