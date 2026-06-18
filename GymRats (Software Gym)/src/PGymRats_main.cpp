@@ -9,6 +9,7 @@
  */
 #include <iostream>
 #include "CPersona.h"
+#include "CJefe.h"
 using namespace std;
 
 //PROTOTIPOS (declaraciones de funciones dentro del main)
@@ -33,7 +34,9 @@ int main(){
 			cout<<"\n¡Error! Ingrese solo dígitos.";
 			cout<<"\n\nIngrese el número del perfil que desee crear o escriba 0 para salir: ";
 		}
-			
+		
+		if (opcion == 0){break;}
+		
 		switch(opcion){
 			
 			case 1:
