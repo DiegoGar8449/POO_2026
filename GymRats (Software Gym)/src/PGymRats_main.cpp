@@ -10,6 +10,7 @@
 #include <iostream>
 #include "CPersona.h"
 #include "CJefe.h"
+#include "CEmpleado.h"
 using namespace std;
 
 //PROTOTIPOS (declaraciones de funciones dentro del main)
@@ -32,22 +33,25 @@ int main(){
 			cin.clear();
 			cin.ignore(10000, '\n');
 			cout<<"\n¡Error! Ingrese solo dígitos.";
-			cout<<"\n\nIngrese el número del perfil que desee crear o escriba 0 para salir: ";
+			cout<<"\n\nIngrese el número del perfil que desee usar o escriba 0 para salir: ";
 		}
 		
 		if (opcion == 0){break;}
 		
 		switch(opcion){
 			
-			case 1:
-			CJefe jefe; //objeto
-			jefe.solicitar_datos(); //mensaje
-			jefe.gestionar_cuenta();
-			break;
+			case 1:{
+				CJefe jefe; //objeto
+				jefe.menu_principal_jefe();
+			} break;
 			
+			case 2:{
+				CEmpleado empleado; //objeto
+				empleado.menu_principal_empleado();
+			} break;
 			
 			default:
-			cout<<"\n¡Error! Opción no valida en el menu de perfiles."
+			cout<<"\n¡Error! Opción no valida en el menu de perfiles.";
 			break;
 		} 
 		
