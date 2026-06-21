@@ -60,7 +60,7 @@ int main(){
 			cin.clear();
 			cin.ignore(10000, '\n');
 			cout << "\n¡Error! Seleccione una opcion valida (1 para Si, 0 para No).";
-			cout<<"\n\n¿Seleccionar otro perfil para crear? ";
+			cout<<"\n\n¿Desea seleccionar otro perfil? (1 = Si, 0 = No).";
 		}
 	} while (continuar==1);
 	

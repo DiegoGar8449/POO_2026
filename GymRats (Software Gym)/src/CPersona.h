@@ -4,6 +4,8 @@
 /*********** Clase abstracta o Superclase ****************/
 class CPersona{
 	protected:
+	std::string id;
+	std::string contrasenia;
 	std::string nombre;//datos miembro
 	std::string apellido_paterno;
 	std::string apellido_materno;
@@ -12,9 +14,9 @@ class CPersona{
 	std::string calle;
 	std::string calle_num;
 	std::string colonia;
+	
 	public:
 	CPersona();//constructor
-	void solicitar_datos();//funciones miembro
-	void mostrar_datos();
+	bool solicitar_datos();//funciones miembro
 	~CPersona();//destructor
 };

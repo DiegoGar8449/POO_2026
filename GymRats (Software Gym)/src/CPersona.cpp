@@ -18,10 +18,17 @@ CPersona::CPersona(){
 CPersona::~CPersona(){}
 
 //DEFINICION METODOS CPersona
-void CPersona::solicitar_datos(){
+bool CPersona::solicitar_datos(){
 	cout<<"\n**************** INGRESE SUS DATOS ***************";
-	cout<<"\nNombre(s): ";
+	cout<<"\nNombre(s) (o escriba 0 para cancelar y salir): ";
 	getline(cin >> ws, nombre);
+	
+	//verificar la cancelacion.
+	if (nombre == "0"){
+		cout<<"\nOperacion cancelada. Regresando al menú...";
+		return false;//indicamos que se canceló.
+	}
+	
 	cout<<"\nApellido paterno: ";
 	getline(cin>> ws, apellido_paterno);
 	cout<<"\nApellido materno: ";
@@ -42,4 +49,5 @@ void CPersona::solicitar_datos(){
 	cout<<"\nColonia: ";
 	getline(cin >> ws, colonia);
 	cout<<"****************************************";
+	return true; //indicamos que los datos se llenaron con éxito.
 }

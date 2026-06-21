@@ -5,11 +5,11 @@
 /*************** Clase hija CJefe ***************/
 class CJefe : public CPersona{
 	private:
-	std::string id;
-	std::string contrasenia;
+	
 	public:
 	CJefe();
+	void menu_principal_jefe(); //menú para elegir el método a utilizar.
 	void gestionar_cuenta(); //Crear cuenta, Modificar datos personales o Eliminar cuenta.
-	void gestionar_empleado(); //Contratar empleado, Modificar o Despedir.
-	void pagar_empleado(); //pago quincenal a empleado e imprime ticket.
+	void gestionar_empleado(); //Modificar turno empleado o Despedir empleado.
+	void pagar_empleado(); //pagar a empleado e imprimir ticket.
 };

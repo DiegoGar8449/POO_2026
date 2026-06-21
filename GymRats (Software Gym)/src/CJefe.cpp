@@ -1,9 +1,14 @@
 #include <iostream>
 #include "CPersona.h"
+#include "CJefe.h"
+#include "CEmpleado.h"
 #include <fstream>//para manejo de archivos de texto y simular bd.
 #include <sstream>//para separar por comas
 #include <cstdio>//para las funciones remove() y rename()
 using namespace std;
+
+//PROTOTIPOS (declaro la función global de limpiar pantalla que hice en main.cpp).
+void limpiar_pantalla(); // limpia pantalla en linux y windows.
 
 /*************** FUNCIONES DEL PROGRAMADOR ***************/
 //CONSTRUCTOR CJefe
@@ -13,6 +18,42 @@ CJefe::CJefe() : CPersona(){
 }
 
 //DEFINICION METODOS CJefe
+//MENU FUNCIONES JEFE
+void CJefe::menu_principal_jefe(){
+	int opcion_jefe;
+	do {
+		limpiar_pantalla();
+		cout<<"\n\n*************** MENU JEFE ***************";
+		cout<<"\n1) Gestionar mi cuenta (O crear nueva cuenta).";
+		cout<<"\n2) Pagar a un empleado.";
+		cout<<"\n3) Regresar al menú principal.";
+		cout<<"\n****************************************";
+		cout<<"\n\nIngrese el digito de la opción que desee realizar: ";
+		
+		while(!(cin >> opcion_jefe)){
+			cin.clear();
+			cin.ignore(10000, '\n');
+			cout<<"\nIngrese unicamente digitos.";
+			cout<<"\n\nSeleccione la accion que desee realizar: ";
+		}
+		
+		switch(opcion_jefe) {
+			case 1:
+			gestionar_cuenta(); break;
+			
+			case 2:
+			pagar_empleado(); break;
+			
+			case 3:
+			cout<<"\nSaliendo del menu del jefe..."; break;
+			
+			default:
+			cout<<"\nOpcion no valida."; break;
+		}
+	} while (opcion_jefe != 3);
+}
+
+//GESTIONAR CUENTA
 void CJefe::gestionar_cuenta(){
 	int opcion_cuenta;
 	do {
@@ -64,95 +105,246 @@ void CJefe::gestionar_cuenta(){
 					cout<<"\n¡Error! El ID '" << id_ingresado << "' ya se encuentra registrado. Intente con uno distinto.\n";
 				} else {
 					
-					//si es nuevo, se asigna al objeto
-					id = id_ingresado;
+					if(solicitar_datos()){
+						
+						//si es nuevo, se asigna al objeto
+						id = id_ingresado;
 					
-					//capturar y validar contraseña
-					cout<<"\nIngrese su contraseña (5 digitos): ";
-					cin>>contrasenia;
+						//capturar y validar contraseña
+						cout<<"\nIngrese su contraseña (5 digitos): ";
+						cin>>contrasenia;
 					
-					//insertar en la bd
-					ofstream archivo_jefes("archivo_jefes.txt",ios::app);
+						//insertar en la bd
+						ofstream archivo_jefes("archivo_jefes.txt",ios::app);
 					
-					if(archivo_jefes.is_open()){
-						archivo_jefes <<id<<","<<contrasenia<<","<<nombre<<","<<apellido_paterno<<","
-						<<apellido_materno<<","<<edad<<"\n";
-						archivo_jefes.close();
-						cout<<"\n¡Cuenta registrada en archivo_jefes.txt!";
-					} else {
-						cout<<"\n¡Error! No se pudo abrir o crear la base de datos.";
+						if(archivo_jefes.is_open()){
+							archivo_jefes << id << "," << contrasenia << "," << nombre << ","
+							<< apellido_paterno << "," << apellido_materno << ","
+							<< edad << "," << telefono_celular << "," 
+							<< calle << "," << calle_num << "," << colonia << "\n";
+							archivo_jefes.close();
+							cout<<"\n¡Cuenta registrada en archivo_jefes.txt!";
+						} else {
+							cout<<"\n¡Error! No se pudo abrir o crear la base de datos.";
+						}
 					}
 				}
 			} break;
 			
-			case 2:{
-				cout<<"\n*************** MODIFICAR CONTRASEÑA ***************";
+			case 2: {
+				cout << "\n\n*************** MODIFICAR CONTRASEÑA JEFE ***************";
 				string id_buscar;
-				cout<<"\nIngrese el Id de su cuenta: "; cin>>id_buscar;
-				ifstream archivo_leer("archivo_jefes.txt"); //se abre el archivo original para leer.
-				if(archivo_leer.is_open()){
-					
-					ofstream archivo_temp("temp.txt"); //se crea un archivo temporal para escribir.
-				
-					bool encontrado = false;
-				
-					if(archivo_leer.is_open() && archivo_temp.is_open()){
+				cout << "\nIngrese su ID (5 dígitos): ";
+				cin >> id_buscar;
+
+				ifstream archivo_leer("archivo_jefes.txt");
+
+				//verificacion para comprobar que la bd original se pueda abrir.
+				if (archivo_leer.is_open()) {
+        
+					//si la bd se pudo abrir, se crea un archivo temporal.
+					ofstream archivo_tempJefe("tempJefe.txt");
+
+					if (archivo_tempJefe.is_open()) {
 						string linea;
-					
-						//se lee linea por linea el archivo original
-						while(getline(archivo_leer, linea)){
+						bool encontrado = false;
+
+						while (getline(archivo_leer, linea)) {
 							stringstream separador(linea);
-							string id_leido, contrasenia_leida, nombre_leido, apPaterno_leido, apMaterno_leido, edad_leido;
-						
-							//se extraen los datos separados por comas
+							string id_leido, contrasenia_leida, nombre_leido, apPaterno_leido, apMaterno_leido;
+							string edad_leida, tel_leido, calle_leida, num_leido, colonia_leida;
+
 							getline(separador, id_leido, ',');
 							getline(separador, contrasenia_leida, ',');
 							getline(separador, nombre_leido, ',');
 							getline(separador, apPaterno_leido, ',');
 							getline(separador, apMaterno_leido, ',');
-							getline(separador, edad_leido, ',');
-						
-							//se compara el id de la linea actual con el que se busca
-							if(id_leido == id_buscar){
+							getline(separador, edad_leida, ',');
+							getline(separador, tel_leido, ',');
+							getline(separador, calle_leida, ',');
+							getline(separador, num_leido, ',');
+							getline(separador, colonia_leida, '\n');
+
+							if (id_leido == id_buscar) {
 								encontrado = true;
-								cout<<"\n¡Cuenta encontrada! Ingrese su nueva contraseña.";
-								//el id no se modifica por ser nuestra "llave primaria" en esta bd
-								cout<<"\nNueva contraseña (5 digitos): ";cin>>contrasenia;
-							
-								//se escriben los datos nuevos en el archivo temporal
-								archivo_temp << id_leido << "," << contrasenia << "," <<nombre_leido << "," <<
-								apPaterno_leido << "," << apMaterno_leido << "," << edad_leido << "\n";
-							} else { //si no es el id que buscamos, se mantiene la linea intacta en el txt original.
-								archivo_temp << linea << "\n";
+								cout << "\n¡Cuenta encontrada! Ingrese su nueva contraseña.";
+								cout << "\nNueva contraseña (5 dígitos): ";
+								cin >> contrasenia;
+
+								archivo_tempJefe << id_leido << "," << contrasenia << "," << nombre_leido << ","
+                                << apPaterno_leido << "," << apMaterno_leido << "," << edad_leida << ","
+                                << tel_leido << "," << calle_leida << "," << num_leido << "," << colonia_leida << "\n";
+							} else { 
+								archivo_tempJefe << linea << "\n";
 							}
 						}
-					
+
 						archivo_leer.close();
-						archivo_temp.close();
-					
-						if(encontrado){
-							//se reemplaza el archivo viejo con el nuevo.
+						archivo_tempJefe.close();
+
+						if (encontrado) {
 							remove("archivo_jefes.txt");
-							rename("temp.txt","archivo_jefes.txt");
-							cout<<"\n¡Datos actualizados correctamente en la base de datos!";
-						} else { //si el id no existía, se borra la basura temporal.
-							remove("temp.txt");
-							cout<<"\nNo se encontró ninguna cuenta con el id ingresado: "<< id_buscar;
+							rename("tempJefe.txt", "archivo_jefes.txt");
+							cout << "\n¡Datos actualizados correctamente en la base de datos!";
+						} else { 
+							remove("tempJefe.txt"); // Borramos el temporal si no se encontró el ID
+							cout << "\nNo se encontró ninguna cuenta con el ID ingresado: " << id_buscar;
 						}
 					}
-					
 				} else {
-				cout<<"\nNo se pudo abrir la base de datos. Quiza no hay cuentas registradas.";
+					cout << "\nNo se pudo abrir la base de datos o quizá no existe ninguna cuenta creada.";
 				}
-				
-			}	break;
-				
-			case 3:
+			} break;
+		
+			case 3:{
 				cout<<"\nRegresando al menu principal...\n";
-				break;
+			
+			}break;
+			
 			default:
-				cout<<"\nOpcion no valida.";
+			cout<<"\nOpcion no valida.";
 		}
 		
 	}while (opcion_cuenta != 3);
+}
+
+//METODO PAGAR EMPLEADO
+void CJefe::pagar_empleado(){
+    cout << "\n*************** PAGAR EMPLEADO ***************";
+    string id_buscar;
+    cout << "\nIngrese el Id del empleado a pagar: ";
+    cin >> id_buscar;
+    
+    ifstream leer_empleados("archivo_empleados.txt");
+    if (leer_empleados.is_open()){
+        string linea;
+        bool encontrado = false;
+        CEmpleado emp;
+        
+        while (getline(leer_empleados, linea)) {
+            stringstream separador(linea);
+            string id_leido, pass_leida, nombre_leido, apPaterno_leido, apMaterno_leido;
+            string edad_leida, tel_leido, calle_leida, num_leido, colonia_leida;
+            string turno_leido, salario_str, horas_str, bono_str;
+            
+            //se leen las 14 columnas
+            getline(separador, id_leido, ',');
+            getline(separador, pass_leida, ',');
+            getline(separador, nombre_leido, ',');
+            getline(separador, apPaterno_leido, ',');
+            getline(separador, apMaterno_leido, ',');
+            getline(separador, edad_leida, ',');
+            getline(separador, tel_leido, ',');
+            getline(separador, calle_leida, ',');
+            getline(separador, num_leido, ',');
+            getline(separador, colonia_leida, ',');
+            getline(separador, turno_leido, ',');
+            getline(separador, salario_str, ',');
+            getline(separador, horas_str, ',');
+            getline(separador, bono_str, '\n');
+            
+            if (id_leido == id_buscar){
+                encontrado = true;
+                emp.id = id_leido;
+                emp.nombre = nombre_leido;
+                emp.apellido_paterno = apPaterno_leido;
+                emp.apellido_materno = apMaterno_leido;
+                emp.edad = stoi(edad_leida);
+                emp.telefono_celular = tel_leido;
+                emp.calle = calle_leida;
+                emp.calle_num = num_leido;
+                emp.colonia = colonia_leida;
+                emp.turno = turno_leido;
+                emp.salario_base = stof(salario_str);
+                emp.horas_trabajadas = stoi(horas_str);
+                emp.bono = stof(bono_str);
+                break;
+            }
+        }
+        leer_empleados.close();
+        
+        if (encontrado){
+            float pago_total = (emp.salario_base * emp.horas_trabajadas) + emp.bono;
+            
+            cout << "\nGenerando recibo de pago para: " << emp.nombre;
+            cout << "\nTotal a pagar: $" << pago_total;
+            
+            string nombre_ticket = "ticket_pago_" + emp.id + ".txt";
+            ofstream ticket(nombre_ticket);
+            
+            if (ticket.is_open()) {
+                ticket << "\n****************************************";
+                ticket << "\nGYMRATS - RECIBO DE PAGO";
+                ticket << "\n****************************************";
+                ticket << "\nId Empleado: " << emp.id;
+                ticket << "\nNombre: " << emp.nombre << " " << emp.apellido_paterno << " " << emp.apellido_materno;
+                ticket << "\nPago por hora: $" << emp.salario_base;
+                ticket << "\nHoras laboradas: " << emp.horas_trabajadas;
+                ticket << "\nBono: $" << emp.bono;
+                ticket << "\n----------------------------------------";
+                ticket << "\nTOTAL NETO RECIBIDO: $" << pago_total;
+                ticket.close();
+                
+                cout << "\n¡Ticket de pago generado con exito (" << nombre_ticket << ")!";
+                
+                //segundo bloque de lectura para reiniciar horas y bonos
+                ifstream archivo_leer("archivo_empleados.txt");
+                ofstream archivo_temp("tempEmpleado.txt");
+                
+                if (archivo_leer.is_open() && archivo_temp.is_open()){
+                    string linea;
+                    while (getline(archivo_leer, linea)){
+                        stringstream separador(linea);
+                        string id_leido, pass_leida, nombre_leido, apPaterno_leido, apMaterno_leido;
+                        string edad_leida, tel_leido, calle_leida, num_leido, colonia_leida;
+                        string turno_leido, salario_str, horas_str, bono_str;
+                        
+                        getline(separador, id_leido, ',');
+                        getline(separador, pass_leida, ',');
+                        getline(separador, nombre_leido, ',');
+                        getline(separador, apPaterno_leido, ',');
+                        getline(separador, apMaterno_leido, ',');
+                        getline(separador, edad_leida, ',');
+                        getline(separador, tel_leido, ',');
+                        getline(separador, calle_leida, ',');
+                        getline(separador, num_leido, ',');
+                        getline(separador, colonia_leida, ',');
+                        getline(separador, turno_leido, ',');
+                        getline(separador, salario_str, ',');
+                        getline(separador, horas_str, ',');
+                        getline(separador, bono_str, '\n');
+                        
+                        if (id_leido == emp.id){
+                            //las metricas se reinician a 0.
+                            archivo_temp << id_leido << "," << pass_leida << "," 
+                                         << nombre_leido << "," << apPaterno_leido << "," 
+                                         << apMaterno_leido << "," << edad_leida << ","
+                                         << tel_leido << "," << calle_leida << ","
+                                         << num_leido << "," << colonia_leida << ","
+                                         << turno_leido << "," << salario_str << "," 
+                                         << "0" << "," 
+                                         << "0.00" << "\n";
+                        } else {
+                            archivo_temp << linea << "\n";
+                        }
+                    }
+                    archivo_leer.close();
+                    archivo_temp.close();
+                    
+                    remove("archivo_empleados.txt");
+                    rename("tempEmpleado.txt", "archivo_empleados.txt");
+                    
+                    cout << "\nHoras y bonos del empleado reseteados para el próximo periodo.";
+                }
+            }
+        } else {
+            cout << "\n¡Error! No se encontró ningun empleado con el Id: " << id_buscar;
+        }
+    } else {
+        cout << "\n¡Error! No se pudo abrir la base de datos de empleados. Quiza no hay ningun empleado registrado.";
+    }
+    
+    cout << "\nPresione ENTER para continuar...";
+    cin.ignore(10000, '\n');
+    cin.get();
 }

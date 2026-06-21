@@ -7,8 +7,6 @@ class CEmpleado : public CPersona {
 	//clase amiga para mantener encapsulamiento y permitir la asociación entre CJefe y CEmpleado
 	friend class CJefe;
 	private://atributos miembro
-	std::string id;
-	std::string contrasenia;
 	std::string turno;
 	float salario_base;
 	int horas_trabajadas;
@@ -16,8 +14,10 @@ class CEmpleado : public CPersona {
 	
 	public:
 	CEmpleado();//constructor
+	bool iniciar_sesion();
 	void menu_principal_empleado();
 	void gestionar_cuenta();
+	void cobrar_cliente();
 	void gestionar_cliente();
 	void llamar_emergencias();
 };
