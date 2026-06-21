@@ -354,18 +354,32 @@ void CEmpleado::cobrar_cliente(){
 		
 		string linea;
 		bool encontrado = false;
-		string nombre_cliente;
+		string nombre_cliente, apPaterno_cliente, apMaterno_cliente, membresia_cliente, estado_membresia_cliente;
     
 		while (getline(archivo_clientes, linea)){
 			stringstream separador(linea);
-			string id_leido, pass_leida, nombre_leido;
+			string id_leido, pass_leida, nombre_leido, apPat_leido, apMat_leido, edad_leida, tel_leido;
+			string calle_leida, num_leido, colonia_leida, membresia_leida, estado_leido;
 			getline(separador, id_leido, ',');
 			getline(separador, pass_leida, ',');
 			getline(separador, nombre_leido, ',');
+			getline(separador, apPat_leido, ',');
+			getline(separador, apMat_leido, ',');
+			getline(separador, edad_leida, ',');
+			getline(separador, tel_leido, ',');
+			getline(separador, calle_leida, ',');
+			getline(separador, num_leido, ',');
+			getline(separador, colonia_leida, ',');
+			getline(separador, membresia_leida, ',');
+			getline(separador, estado_leido, '\n');
         
 			if (id_leido == id_cliente){
 				encontrado = true;
 				nombre_cliente = nombre_leido;
+				apPaterno_cliente = apPat_leido;
+				apMaterno_cliente = apMat_leido;
+				membresia_cliente = membresia_leida;
+				estado_membresia_cliente = estado_leido;
 				break;
 			}	
 		}
@@ -393,17 +407,39 @@ void CEmpleado::cobrar_cliente(){
 		cout << "\nCobro de $" << monto << " realizado a " << nombre_cliente;
 		cout << "\n**************************************************";
     
+		//generar el ticket de cobro del cliente, igual que se hace con el pago a empleados.
+		string nombre_ticket_cliente = "ticket_cobro_" + id_cliente + ".txt";
+		ofstream ticket_cliente(nombre_ticket_cliente);
+
+		if (ticket_cliente.is_open()) {
+			ticket_cliente << "\n****************************************";
+			ticket_cliente << "\nGYMRATS - RECIBO DE COBRO";
+			ticket_cliente << "\n****************************************";
+			ticket_cliente << "\nId Cliente: " << id_cliente;
+			ticket_cliente << "\nNombre: " << nombre_cliente << " " << apPaterno_cliente << " " << apMaterno_cliente;
+			ticket_cliente << "\nTipo de membresia: " << membresia_cliente;
+			ticket_cliente << "\nEstado de membresia: " << estado_membresia_cliente;
+			ticket_cliente << "\nAtendido por (Id empleado): " << id;
+			ticket_cliente << "\n----------------------------------------";
+			ticket_cliente << "\nMONTO COBRADO: $" << monto;
+			ticket_cliente << "\n****************************************\n";
+			ticket_cliente.close();
+			cout << "\n¡Ticket de cobro generado con exito (" << nombre_ticket_cliente << ")!";
+		} else {
+			cout << "\n¡Error! No se pudo generar el ticket de cobro del cliente.";
+		}
+    
 		//para actualizar las métricas del empleado acorde a sus actividades realizadas.
 		horas_trabajadas += 1;
 		bono += (monto * 0.10);
 
-		// Permite que los cambios en el archivo se mantengan.
+		//permite que los cambios en el archivo se mantengan.
 		ifstream archivo_leer("archivo_empleados.txt");
 
-		// 1. Verificamos que se pueda abrir el archivo de empleados
+		//verifica que se pueda abrir el archivo de empleados
 		if (archivo_leer.is_open()) {
         
-			// 2. Creamos el archivo temporal
+			//crear el archivo temporal
 			ofstream archivo_temp("tempEmpleado.txt");
 
 			if (archivo_temp.is_open()) {

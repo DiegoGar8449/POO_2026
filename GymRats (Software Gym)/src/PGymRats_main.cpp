@@ -11,6 +11,8 @@
 #include "CPersona.h"
 #include "CJefe.h"
 #include "CEmpleado.h"
+#include "CCliente.h"
+#include "CDeporte.h"
 using namespace std;
 
 //PROTOTIPOS (declaraciones de funciones dentro del main)
@@ -48,6 +50,13 @@ int main(){
 			case 2:{
 				CEmpleado empleado; //objeto
 				empleado.menu_principal_empleado();
+			} break;
+			
+			//case: 3
+			
+			case 4:{
+				CCliente cliente; //objeto.
+				cliente.menu_principal_cliente(); //llamada a su menu.
 			} break;
 			
 			default:
