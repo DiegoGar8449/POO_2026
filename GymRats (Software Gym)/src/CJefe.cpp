@@ -73,60 +73,55 @@ void CJefe::gestionar_cuenta(){
 		switch(opcion_cuenta){
 			case 1:{
 				cout<<"\n\n*************** CREAR CUENTA ***************";
-				string id_ingresado;
 				
-				//capturar y validar el id ingresado
-				cout<<"\nIngrese su id (5 dígitos): ";
-				cin>>id_ingresado;
-				
-				//verificar si el id ya existe en la bd
-				bool id_existe = false;
-				ifstream archivo_leer("archivo_jefes.txt");
-				
-				if(archivo_leer.is_open()){
-					string linea;
-					while(getline(archivo_leer, linea)){
-						stringstream separador(linea);
-						string id_leido;
+				// 1) Primero se llenan los datos personales.
+				if(solicitar_datos()){
+					
+					// 2) Luego se pide el ID, con bucle hasta que sea único.
+					string id_ingresado;
+					bool id_existe = true;
+					
+					while(id_existe){
+						cout<<"\nIngrese un Id para su cuenta (5 dígitos): ";
+						cin>>id_ingresado;
 						
-						//se extrae el id para corroborar.
-						getline(separador, id_leido, ','); 
+						id_existe = false;
+						ifstream archivo_leer("archivo_jefes.txt");
+						if(archivo_leer.is_open()){
+							string linea;
+							while(getline(archivo_leer, linea)){
+								stringstream separador(linea);
+								string id_leido;
+								getline(separador, id_leido, ',');
+								if(id_leido == id_ingresado){
+									id_existe = true;
+									break;
+								}
+							}
+							archivo_leer.close();
+						}
 						
-						if(id_leido == id_ingresado){
-							id_existe = true;
-							break; //si el id existe, se rompe el ciclo.
+						if(id_existe){
+							cout<<"\n¡Error! El Id '" << id_ingresado << "' ya existe. Intente con otro.\n";
 						}
 					}
-					archivo_leer.close();
-				}
-				
-				//ciclo de decision para rechazar o continuar
-				if(id_existe){
-					cout<<"\n¡Error! El ID '" << id_ingresado << "' ya se encuentra registrado. Intente con uno distinto.\n";
-				} else {
+					id = id_ingresado;
 					
-					if(solicitar_datos()){
-						
-						//si es nuevo, se asigna al objeto
-						id = id_ingresado;
+					// 3) Por último la contraseña (credenciales juntas al final).
+					cout<<"\nCree una contraseña (5 dígitos): ";
+					cin>>contrasenia;
 					
-						//capturar y validar contraseña
-						cout<<"\nIngrese su contraseña (5 digitos): ";
-						cin>>contrasenia;
-					
-						//insertar en la bd
-						ofstream archivo_jefes("archivo_jefes.txt",ios::app);
-					
-						if(archivo_jefes.is_open()){
-							archivo_jefes << id << "," << contrasenia << "," << nombre << ","
-							<< apellido_paterno << "," << apellido_materno << ","
-							<< edad << "," << telefono_celular << "," 
-							<< calle << "," << calle_num << "," << colonia << "\n";
-							archivo_jefes.close();
-							cout<<"\n¡Cuenta registrada en archivo_jefes.txt!";
-						} else {
-							cout<<"\n¡Error! No se pudo abrir o crear la base de datos.";
-						}
+					// Guardar en la base de datos.
+					ofstream archivo_jefes("archivo_jefes.txt", ios::app);
+					if(archivo_jefes.is_open()){
+						archivo_jefes << id << "," << contrasenia << "," << nombre << ","
+						<< apellido_paterno << "," << apellido_materno << ","
+						<< edad << "," << telefono_celular << "," 
+						<< calle << "," << calle_num << "," << colonia << "\n";
+						archivo_jefes.close();
+						cout<<"\n¡Cuenta registrada exitosamente en archivo_jefes.txt!";
+					} else {
+						cout<<"\n¡Error! No se pudo abrir o crear la base de datos.";
 					}
 				}
 			} break;

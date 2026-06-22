@@ -1,6 +1,7 @@
 #include <iostream>
 #include "CPersona.h"
 #include "CEmpleado.h"
+#include "CEmergencia.h"
 #include <fstream>
 #include <sstream>
 #include <cstdio>
@@ -128,29 +129,30 @@ void CEmpleado::menu_principal_empleado(){
         cout << "\n\n*************** MENU EMPLEADO ***************";
         cout << "\n1) Gestionar mi cuenta (Crear perfil o Modificar contraseña).";
         cout << "\n2) Iniciar Sesion para Cobrar a un cliente.";
-        cout << "\n3) Regresar al menú principal.";
+        cout << "\n3) Reportar Emergencia (Ambulancia / Bomberos / Policia).";
+        cout << "\n4) Regresar al menu principal.";
         cout << "\n**********************************************************";
-        cout << "\nIngrese el digito de la opción que desee realizar: ";
-        
+        cout << "\nIngrese el digito de la opcion que desee realizar: ";
+
         while (!(cin >> opcion_empleado)){
             cin.clear();
             cin.ignore(10000, '\n');
             cout << "\nIngrese unicamente digitos.";
             cout << "\nSeleccione la accion que desee realizar: ";
         }
-        
+
         switch(opcion_empleado) {
             case 1: gestionar_cuenta(); break;
-            case 2: 
-                //se solicita un id y contraseña para otorgar acceso
+            case 2:
                 if(iniciar_sesion()) {
-                    cobrar_cliente(); 
+                    cobrar_cliente();
                 }
                 break;
-            case 3: cout << "\nSaliendo del menu del empleado..."; break;
+            case 3: llamar_emergencias(); break;
+            case 4: cout << "\nSaliendo del menu del empleado..."; break;
             default: cout << "\nOpcion no valida."; break;
         }
-    } while (opcion_empleado != 3);
+    } while (opcion_empleado != 4);
 }
 
 //METODO GESTIONAR CUENTA
@@ -175,14 +177,13 @@ void CEmpleado::gestionar_cuenta(){
             case 1: {
 				cout << "\n\n*************** CREAR CUENTA EMPLEADO ***************\n\n";
     
-				//solicitar datos personales
+				// 1) Primero los datos personales.
 				if (solicitar_datos()) {
         
+					// 2) Id con bucle hasta que sea único.
 					string id_ingresado;
 					bool id_valido = false;
         
-					//solicitar y validar id
-					//un ciclo para permitir que, si el usuario se equivoca, no deba reiniciar el proceso
 					while (!id_valido) {
 						cout << "\nIngrese el ID asignado para este empleado (5 dígitos): ";
 						cin >> id_ingresado;
@@ -195,51 +196,49 @@ void CEmpleado::gestionar_cuenta(){
 							while (getline(archivo_leer, linea)) {
 								stringstream separador(linea);
 								string id_leido;
-                    
-								getline(separador, id_leido, ','); 
-                    
+								getline(separador, id_leido, ',');
 								if (id_leido == id_ingresado) {
 									id_existe = true;
 									break;
-								}	
+								}
 							}
 							archivo_leer.close();
 						}
             
 						if (id_existe) {
-							cout << "¡Error! El ID '" << id_ingresado << "' ya se encuentra registrado. Intente con uno distinto.\n";
+							cout << "¡Error! El ID '" << id_ingresado << "' ya existe. Intente con uno distinto.\n";
 						} else {
-							id_valido = true; //salimos del ciclo porque el Id es válido
+							id_valido = true;
 							id = id_ingresado;
 						}
 					}
         
-					//solicitar
-						cout << "Ingrese su contraseña (5 dígitos): ";
-						cin >> contrasenia;
+					// 3) Contraseña justo después del ID (credenciales juntas).
+					cout << "Ingrese su contraseña (5 dígitos): ";
+					cin >> contrasenia;
         
-					//solicitar datos laborales
-						cout << "\nIngrese el turno asignado (Ej. Matutino, Vespertino, Mixto): ";
-						cin >> turno;
+					// 4) Datos laborales al final.
+					cout << "\nIngrese el turno asignado (Ej. Matutino, Vespertino, Mixto): ";
+					cin >> turno;
             
-						cout << "Ingrese el salario base por periodo: $";
-						while (!(cin >> salario_base) || salario_base <= 0) {
-							cout << "¡Error! Por favor ingrese un salario válido mayor a 0: $";
-							cin.clear();
-							cin.ignore(10000, '\n');
-						}
-						horas_trabajadas = 0;
-						bono = 0.00;
+					cout << "Ingrese el salario base por hora: $";
+					while (!(cin >> salario_base) || salario_base <= 0) {
+						cout << "¡Error! Ingrese un salario válido mayor a 0: $";
+						cin.clear();
+						cin.ignore(10000, '\n');
+					}
+					horas_trabajadas = 0;
+					bono = 0.00;
         
-					//guardar en la bd
+					// Guardar en la base de datos.
 					ofstream archivo_empleados("archivo_empleados.txt", ios::app);
         
 					if (archivo_empleados.is_open()) {
 						archivo_empleados << id << "," << contrasenia << "," << nombre << ","
                         << apellido_paterno << "," << apellido_materno << ","
-                        << edad << "," << telefono_celular << "," 
+                        << edad << "," << telefono_celular << ","
                         << calle << "," << calle_num << "," << colonia << ","
-                        << turno << "," << salario_base << "," 
+                        << turno << "," << salario_base << ","
                         << horas_trabajadas << "," << bono << "\n";
             
 						archivo_empleados.close();
@@ -249,7 +248,7 @@ void CEmpleado::gestionar_cuenta(){
 					}
 				}
     
-				break; 
+				break;
 			}
             
             case 2: {
@@ -494,4 +493,24 @@ void CEmpleado::cobrar_cliente(){
 		cout << "\nPresione ENTER para continuar...";
 		cin.ignore(10000, '\n');
 		cin.get();
+}
+
+//METODO LLAMAR EMERGENCIAS
+void CEmpleado::llamar_emergencias() {
+    //se verifica que el empleado haya iniciado sesion (id no vacío).
+    if (id.empty()) {
+        cout << "\n¡Error! Debe iniciar sesion primero para reportar una emergencia.";
+        cout << "\nPresione ENTER para continuar...";
+        cin.ignore(10000, '\n');
+        cin.get();
+        return;
+    }
+
+    //asociacion con CEmergencia: se crea el objeto y se le pasa el id del empleado.
+    CEmergencia emergencia;
+    emergencia.enviar_ayuda(id);
+
+    cout << "Presione ENTER para continuar...";
+    cin.ignore(10000, '\n');
+    cin.get();
 }

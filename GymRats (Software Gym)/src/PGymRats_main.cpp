@@ -13,6 +13,7 @@
 #include "CEmpleado.h"
 #include "CCliente.h"
 #include "CDeporte.h"
+#include "CEntrenador.h"
 using namespace std;
 
 //PROTOTIPOS (declaraciones de funciones dentro del main)
@@ -53,6 +54,10 @@ int main(){
 			} break;
 			
 			//case: 3
+			case 3:{
+				CEntrenador entrenador; //objeto
+				entrenador.menu_principal_entrenador();
+			} break;
 			
 			case 4:{
 				CCliente cliente; //objeto.

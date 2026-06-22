@@ -1,9 +1,12 @@
+#pragma once
 #include <string>
-class CEmergencia{
-	protected:
-		int tipo_emergencia;
-		string id_empleado;
-	public:
-		CEmergencia();
-		void enviar_ayuda();
+
+class CEmergencia {
+    private:
+        int tipo_emergencia;
+        std::string id_empleado;
+
+    public:
+        CEmergencia();
+        void enviar_ayuda(const std::string &id_emp);
 };

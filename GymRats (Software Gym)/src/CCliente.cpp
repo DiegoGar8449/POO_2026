@@ -152,10 +152,29 @@ void CCliente::gestionar_cuenta() {
 
 void CCliente::gestionar_deporte() {
     cout << "\n*************** AREA DEPORTIVA ***************\n";
-    CDeporte mi_rutina; 
-    mi_rutina.solicitar_datos_deporte();
-    mi_rutina.realizar_deporte(id, nombre); //se registra qué cliente realizó la actividad
-    
+    cout << "\n¿Qué deporte deseas practicar hoy?";
+    cout << "\n1) Zumba";
+    cout << "\n2) Cardio";
+    cout << "\n3) Pesas";
+    cout << "\nSeleccione una opcion: ";
+
+    int opcion;
+    while (!(cin >> opcion) || opcion < 1 || opcion > 3) {
+        cin.clear();
+        cin.ignore(10000, '\n');
+        cout << "Opcion invalida. Ingrese 1, 2 o 3: ";
+    }
+
+    // Polimorfismo: se crea el objeto del subtipo correcto.
+    CDeporte* mi_rutina = nullptr;
+    if (opcion == 1)      mi_rutina = new CZumba();
+    else if (opcion == 2) mi_rutina = new CCardio();
+    else                  mi_rutina = new CPesas();
+
+    mi_rutina->solicitar_datos_deporte();
+    mi_rutina->realizar_deporte(id, nombre);
+    delete mi_rutina;
+
     cout << "Presione ENTER para continuar...";
     cin.ignore(10000, '\n');
     cin.get();
@@ -163,7 +182,32 @@ void CCliente::gestionar_deporte() {
 
 void CCliente::contratar_entrenador() {
     cout << "\n*************** CONTRATAR ENTRENADOR ***************\n";
-    cout << "Modulo en construcción. ¡Pronto tendremos entrenadores disponibles!\n";
+    cout << "¿Para qué deporte deseas contratar un entrenador?\n";
+    cout << "1) Zumba  2) Cardio  3) Pesas\nSeleccione: ";
+
+    int opcion;
+    while (!(cin >> opcion) || opcion < 1 || opcion > 3) {
+        cin.clear();
+        cin.ignore(10000, '\n');
+        cout << "Opcion invalida: ";
+    }
+
+    string deporte_solicitado;
+    if (opcion == 1)      deporte_solicitado = "Zumba";
+    else if (opcion == 2) deporte_solicitado = "Cardio";
+    else                  deporte_solicitado = "Pesas";
+
+    //escribir la solicitud para que el entrenador la vea desde su menú.
+    ofstream solicitudes("solicitudes_entrenador.txt", ios::app);
+    if (solicitudes.is_open()) {
+        solicitudes << id << "," << nombre << "," << deporte_solicitado << ",Pendiente\n";
+        solicitudes.close();
+        cout << "\n¡Solicitud enviada correctamente! Un entrenador de " << deporte_solicitado
+             << " te contactara pronto.\n";
+    } else {
+        cout << "\nError al enviar la solicitud. Intentelo de nuevo.\n";
+    }
+
     cout << "Presione ENTER para regresar...";
     cin.ignore(10000, '\n');
     cin.get();
